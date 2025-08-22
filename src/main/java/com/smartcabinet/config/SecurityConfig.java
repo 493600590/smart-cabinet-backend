@@ -41,6 +41,8 @@ public class SecurityConfig {
                 .antMatchers("/users/register", "/users/login", "/users/wechat-login").permitAll()
                 // 商品信息（公开访问）
                 .antMatchers("/products/**").permitAll()
+                // 易通订单接口（公开访问，用于测试）
+                .antMatchers("/yitong/orders/**").permitAll()
                 // 设备心跳
                 .antMatchers("/devices/*/heartbeat").permitAll()
                 // 监控端点
