@@ -126,4 +126,76 @@ public class YitongOrderController {
         
         return Result.success("查询订单商品明细成功", orderItems);
     }
+    
+    /**
+     * 查询用户待支付订单列表（分页）
+     * GET /yitong/orders/pending-payment?userId=xxx&pageNum=1&pageSize=10
+     * 用于微信小程序"待支付"标签页
+     */
+    @GetMapping("/pending-payment")
+    public Result<IPage<YitongOrder>> getPendingPaymentOrders(
+            @RequestParam String userId,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+        
+        Page<YitongOrder> page = new Page<>(pageNum, pageSize);
+        // 查询待支付状态的订单
+        IPage<YitongOrder> orderPage = orderMapper.selectUserOrdersByStatusPage(page, userId, "PENDING");
+        
+        return Result.success("查询待支付订单成功", orderPage);
+    }
+    
+    /**
+     * 查询用户售后退款订单列表（分页）
+     * GET /yitong/orders/refund?userId=xxx&pageNum=1&pageSize=10
+     * 用于微信小程序"售后退款"标签页
+     */
+    @GetMapping("/refund")
+    public Result<IPage<YitongOrder>> getRefundOrders(
+            @RequestParam String userId,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
+        
+        Page<YitongOrder> page = new Page<>(pageNum, pageSize);
+        // 查询退款状态的订单
+        IPage<YitongOrder> orderPage = orderMapper.selectUserOrdersByStatusPage(page, userId, "REFUNDED");
+        
+        return Result.success("查询售后退款订单成功", orderPage);
+    }
+    
+    /**
+     * 查询用户待支付订单数量
+     * GET /yitong/orders/pending-payment/count?userId=xxx
+     * 用于微信小程序显示待支付订单数量徽标
+     */
+    @GetMapping("/pending-payment/count")
+    public Result<Integer> getPendingPaymentCount(@RequestParam String userId) {
+        
+        // 统计待支付订单数量
+        Long count = orderMapper.selectCount(
+            new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<YitongOrder>()
+                .eq("user_id", userId)
+                .eq("order_status", "PENDING")
+                .eq("deleted", 0));
+        
+        return Result.success("查询待支付订单数量成功", count.intValue());
+    }
+    
+    /**
+     * 查询用户售后退款订单数量
+     * GET /yitong/orders/refund/count?userId=xxx
+     * 用于微信小程序显示售后退款订单数量徽标
+     */
+    @GetMapping("/refund/count")
+    public Result<Integer> getRefundCount(@RequestParam String userId) {
+        
+        // 统计退款订单数量
+        Long count = orderMapper.selectCount(
+            new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<YitongOrder>()
+                .eq("user_id", userId)
+                .eq("order_status", "REFUNDED")
+                .eq("deleted", 0));
+        
+        return Result.success("查询售后退款订单数量成功", count.intValue());
+    }
 }

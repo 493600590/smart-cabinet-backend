@@ -195,6 +195,27 @@ Content-Type: application/json
 }
 ```
 
+### 易通无人柜订单接口（微信小程序）
+```bash
+# 查询用户全部订单
+GET /api/yitong/orders?userId=YT_USER_001&pageNum=1&pageSize=10
+
+# 查询待支付订单
+GET /api/yitong/orders/pending-payment?userId=YT_USER_001&pageNum=1&pageSize=10
+
+# 查询售后退款订单
+GET /api/yitong/orders/refund?userId=YT_USER_001&pageNum=1&pageSize=10
+
+# 获取待支付订单数量
+GET /api/yitong/orders/pending-payment/count?userId=YT_USER_001
+
+# 获取售后退款订单数量
+GET /api/yitong/orders/refund/count?userId=YT_USER_001
+
+# 获取订单详情
+GET /api/yitong/orders/detail/ORD20241218001
+```
+
 ## MQTT通信
 
 ### 设备上报主题
