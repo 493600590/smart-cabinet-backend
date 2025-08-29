@@ -4,7 +4,7 @@
 本文档描述了易通无人柜微信小程序订单功能的后端API接口，基于嗨便利2.0开放接口文档设计，适配易通无人柜系统。
 
 ## 基础信息
-- **基础URL**: `http://localhost:8080/api/yitong/orders`
+- **基础URL**: `http://localhost:8000/api`
 - **请求格式**: JSON
 - **响应格式**: JSON
 - **字符编码**: UTF-8
@@ -193,6 +193,62 @@ GET /api/yitong/orders/recent?userId=YT_USER_001&limit=5
 **请求示例**:
 ```
 GET /api/yitong/orders/ORD20241218001/items
+```
+
+### 7. 查询待支付订单（分页）
+**接口地址**: `GET /yitong/orders/pending-payment`
+
+**请求参数**:
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| userId | String | 是 | 用户ID |
+| pageNum | Integer | 否 | 页码，默认1 |
+| pageSize | Integer | 否 | 页大小，默认10 |
+
+**请求示例**:
+```
+GET /api/yitong/orders/pending-payment?userId=YT_USER_001&pageNum=1&pageSize=10
+```
+
+### 8. 查询售后退款订单（分页）
+**接口地址**: `GET /yitong/orders/refund`
+
+**请求参数**:
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| userId | String | 是 | 用户ID |
+| pageNum | Integer | 否 | 页码，默认1 |
+| pageSize | Integer | 否 | 页大小，默认10 |
+
+**请求示例**:
+```
+GET /api/yitong/orders/refund?userId=YT_USER_001&pageNum=1&pageSize=10
+```
+
+### 9. 待支付订单数量统计
+**接口地址**: `GET /yitong/orders/pending-payment/count`
+
+**请求参数**:
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| userId | String | 是 | 用户ID |
+
+**请求示例**:
+```
+GET /api/yitong/orders/pending-payment/count?userId=YT_USER_001
+```
+
+### 10. 售后退款订单数量统计
+**接口地址**: `GET /yitong/orders/refund/count`
+
+**请求参数**:
+| 参数名 | 类型 | 必填 | 描述 |
+|--------|------|------|------|
+| userId | String | 是 | 用户ID |
+
+**请求示例**:
+```
+GET /api/yitong/orders/refund/count?userId=YT_USER_001
 ```
 
 ## 微信小程序使用场景
