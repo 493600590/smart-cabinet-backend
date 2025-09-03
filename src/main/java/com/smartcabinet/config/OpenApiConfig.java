@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class OpenApiConfig {
                         .license(new License()
                                 .name("MIT License")
                                 .url("https://opensource.org/licenses/MIT")))
-                .servers(List.of(
+                .servers(Arrays.asList(
                         new Server().url("http://localhost:8000/api").description("本地开发环境（推荐）"),
                         new Server().url("http://localhost:8000").description("本地开发环境（根路径）")
                 ));

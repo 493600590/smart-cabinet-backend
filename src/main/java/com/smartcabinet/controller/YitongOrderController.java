@@ -75,7 +75,7 @@ public class YitongOrderController {
         }
         
         // 查询订单商品明细
-        List<YitongOrderItem> orderItems = orderItemMapper.selectOrderItemsByCode(orderCode);
+        List<YitongOrderItem> orderItems = orderItemMapper.selectOrderItemsByOrderCode(orderCode);
         order.setOrderItems(orderItems);
         
         return Result.success("查询订单详情成功", order);
@@ -122,7 +122,7 @@ public class YitongOrderController {
     @GetMapping("/{orderCode}/items")
     public Result<List<YitongOrderItem>> getOrderItems(@PathVariable String orderCode) {
         
-        List<YitongOrderItem> orderItems = orderItemMapper.selectOrderItemsByCode(orderCode);
+        List<YitongOrderItem> orderItems = orderItemMapper.selectOrderItemsByOrderCode(orderCode);
         
         return Result.success("查询订单商品明细成功", orderItems);
     }

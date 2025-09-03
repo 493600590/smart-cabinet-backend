@@ -38,7 +38,7 @@ public interface YitongOrderItemMapper extends BaseMapper<YitongOrderItem> {
             "LEFT JOIN yt_goods g ON oi.goods_id = g.goods_id " +
             "WHERE oi.order_code = #{orderCode} " +
             "ORDER BY oi.created_at ASC")
-    List<YitongOrderItem> selectOrderItemsByCode(@Param("orderCode") String orderCode);
+    List<YitongOrderItem> selectOrderItemsByOrderCode(@Param("orderCode") String orderCode);
     
     /**
      * 统计用户购买的商品种类和数量

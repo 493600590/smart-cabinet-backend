@@ -1,7 +1,6 @@
 package com.smartcabinet.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,6 +10,7 @@ import java.util.List;
 
 /**
  * 易通无人柜订单实体类
+ * 映射到 yt_orders 表
  * 
  * @author SmartCabinet Team
  */
@@ -35,7 +35,7 @@ public class YitongOrder {
      * 易通订单号
      */
     @TableField("hbl_order_no")
-    private String yitongOrderNo;
+    private String hblOrderNo;
     
     /**
      * 关联事件ID
@@ -80,13 +80,13 @@ public class YitongOrder {
     private BigDecimal actualAmount;
     
     /**
-     * 订单状态
+     * 订单状态 PENDING-待处理 PAID-已支付 COMPLETED-已完成 CANCELLED-已取消 REFUNDED-已退款
      */
     @TableField("order_status")
     private String orderStatus;
     
     /**
-     * 支付状态
+     * 支付状态 UNPAID-未支付 PAID-已支付 REFUNDING-退款中 REFUNDED-已退款
      */
     @TableField("pay_status")
     private String payStatus;
@@ -116,7 +116,7 @@ public class YitongOrder {
     private String tradeType;
     
     /**
-     * 分账金额(单位:分)
+     * 分账金额
      */
     @TableField("share_amount")
     private BigDecimal shareAmount;
@@ -131,7 +131,6 @@ public class YitongOrder {
      * 订单过期时间
      */
     @TableField("expired_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime expiredAt;
     
     /**
@@ -171,37 +170,7 @@ public class YitongOrder {
     private String remark;
     
     /**
-     * 预留字段1
-     */
-    @TableField("reserved_field1")
-    private String reservedField1;
-    
-    /**
-     * 预留字段2
-     */
-    @TableField("reserved_field2")
-    private String reservedField2;
-    
-    /**
-     * 预留字段3
-     */
-    @TableField("reserved_field3")
-    private String reservedField3;
-    
-    /**
-     * 预留字段4
-     */
-    @TableField("reserved_field4")
-    private String reservedField4;
-    
-    /**
-     * 预留字段5
-     */
-    @TableField("reserved_field5")
-    private String reservedField5;
-    
-    /**
-     * 是否删除
+     * 是否删除 0-未删除 1-已删除
      */
     @TableField("deleted")
     @TableLogic
@@ -210,15 +179,13 @@ public class YitongOrder {
     /**
      * 创建时间
      */
-    @TableField(value = "created_at", fill = FieldFill.INSERT)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField("created_at")
     private LocalDateTime createdAt;
     
     /**
      * 更新时间
      */
-    @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
     
     /**
@@ -226,16 +193,4 @@ public class YitongOrder {
      */
     @TableField(exist = false)
     private List<YitongOrderItem> orderItems;
-    
-    /**
-     * 设备信息（非数据库字段）
-     */
-    @TableField(exist = false)
-    private YitongDevice device;
-    
-    /**
-     * 用户信息（非数据库字段）
-     */
-    @TableField(exist = false)
-    private YitongUser user;
 }
