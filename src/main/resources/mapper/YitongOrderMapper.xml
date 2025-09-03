@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartcabinet.mapper.YitongOrderMapper">
+
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.smartcabinet.model.entity.YitongOrder">
+        <id column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="order_code" property="orderCode" jdbcType="VARCHAR"/>
+        <result column="hbl_order_no" property="hblOrderNo" jdbcType="VARCHAR"/>
+        <result column="event_id" property="eventId" jdbcType="BIGINT"/>
+        <result column="device_code" property="deviceCode" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="order_amount" property="orderAmount" jdbcType="DECIMAL"/>
+        <result column="product_amount" property="productAmount" jdbcType="DECIMAL"/>
+        <result column="promotion_amount" property="promotionAmount" jdbcType="DECIMAL"/>
+        <result column="actual_amount" property="actualAmount" jdbcType="DECIMAL"/>
+        <result column="order_status" property="orderStatus" jdbcType="VARCHAR"/>
+        <result column="pay_status" property="payStatus" jdbcType="VARCHAR"/>
+        <result column="pay_type" property="payType" jdbcType="INTEGER"/>
+        <result column="third_pay_order_id" property="thirdPayOrderId" jdbcType="VARCHAR"/>
+        <result column="channel_type" property="channelType" jdbcType="VARCHAR"/>
+        <result column="trade_type" property="tradeType" jdbcType="VARCHAR"/>
+        <result column="share_amount" property="shareAmount" jdbcType="DECIMAL"/>
+        <result column="trade_time" property="tradeTime" jdbcType="VARCHAR"/>
+        <result column="expired_at" property="expiredAt" jdbcType="TIMESTAMP"/>
+        <result column="nonce_str" property="nonceStr" jdbcType="VARCHAR"/>
+        <result column="request_serial" property="requestSerial" jdbcType="VARCHAR"/>
+        <result column="time_stamp" property="timeStamp" jdbcType="VARCHAR"/>
+        <result column="sign" property="sign" jdbcType="VARCHAR"/>
+        <result column="company_id" property="companyId" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        order_id, order_code, hbl_order_no, event_id, device_code, user_id, 
+        order_amount, product_amount, promotion_amount, actual_amount, order_status, 
+        pay_status, pay_type, third_pay_order_id, channel_type, trade_type, 
+        share_amount, trade_time, expired_at, nonce_str, request_serial, time_stamp, 
+        sign, company_id, remark, deleted, created_at, updated_at
+    </sql>
+
+    <!-- 分页查询用户订单 -->
+    <select id="selectUserOrderPage" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM yt_orders 
+        WHERE deleted = 0 
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="orderStatus != null and orderStatus != ''">
+            AND order_status = #{orderStatus}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据订单编号查询订单 -->
+    <select id="selectByOrderCode" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM yt_orders 
+        WHERE order_code = #{orderCode} AND deleted = 0
+    </select>
+
+    <!-- 统计用户订单数量 -->
+    <select id="countUserOrders" resultType="int">
+        SELECT COUNT(*) 
+        FROM yt_orders 
+        WHERE deleted = 0 
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="orderStatus != null and orderStatus != ''">
+            AND order_status = #{orderStatus}
+        </if>
+    </select>
+
+    <!-- 统计指定时间范围内的销售额 -->
+    <select id="sumSalesAmount" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(actual_amount), 0)
+        FROM yt_orders 
+        WHERE deleted = 0 
+        AND order_status IN ('PAID', 'COMPLETED')
+        <if test="startTime != null">
+            AND created_at >= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND created_at &lt;= #{endTime}
+        </if>
+    </select>
+
+    <!-- 统计每日销售数据 -->
+    <select id="selectDailySalesStats" resultType="java.util.Map">
+        SELECT 
+            DATE(created_at) as date,
+            COUNT(*) as order_count,
+            COALESCE(SUM(actual_amount), 0) as total_amount
+        FROM yt_orders 
+        WHERE deleted = 0 
+        AND order_status IN ('PAID', 'COMPLETED')
+        <if test="startDate != null">
+            AND DATE(created_at) >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND DATE(created_at) &lt;= #{endDate}
+        </if>
+        GROUP BY DATE(created_at)
+        ORDER BY date DESC
+    </select>
+
+    <!-- 查询超时未支付订单 -->
+    <select id="selectTimeoutOrders" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM yt_orders 
+        WHERE deleted = 0 
+        AND order_status = 'PENDING'
+        AND pay_status = 'UNPAID'
+        AND created_at &lt; DATE_SUB(NOW(), INTERVAL #{timeoutMinutes} MINUTE)
+    </select>
+
+    <!-- 分页查询用户订单（不分状态） -->
+    <select id="selectUserOrdersPage" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM yt_orders 
+        WHERE deleted = 0 
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据订单状态分页查询用户订单 -->
+    <select id="selectUserOrdersByStatusPage" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM yt_orders 
+        WHERE deleted = 0 
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="orderStatus != null and orderStatus != ''">
+            AND order_status = #{orderStatus}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据订单编号查询订单详情 -->
+    <select id="selectOrderDetailByCode" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM yt_orders 
+        WHERE order_code = #{orderCode} AND deleted = 0
+    </select>
+
+    <!-- 统计用户各状态订单数量 -->
+    <select id="selectUserOrderStatusCount" resultType="java.util.Map">
+        SELECT 
+            order_status,
+            COUNT(*) as count
+        FROM yt_orders 
+        WHERE deleted = 0 
+        AND user_id = #{userId}
+        GROUP BY order_status
+    </select>
+
+    <!-- 查询用户最近订单 -->
+    <select id="selectUserRecentOrders" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM yt_orders 
+        WHERE deleted = 0 
+        AND user_id = #{userId}
+        ORDER BY created_at DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper> 

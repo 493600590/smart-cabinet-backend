@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartcabinet.mapper.OrderMapper">
+
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.smartcabinet.model.entity.Order">
+        <id column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="order_no" property="orderNo" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="device_id" property="deviceId" jdbcType="VARCHAR"/>
+        <result column="total_amount" property="totalAmount" jdbcType="DECIMAL"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="payment_method" property="paymentMethod" jdbcType="VARCHAR"/>
+        <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP"/>
+        <result column="payment_transaction_id" property="paymentTransactionId" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="deleted" property="deleted" jdbcType="INTEGER"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        order_id, order_no, user_id, device_id, total_amount, status, 
+        payment_method, payment_time, payment_transaction_id, remark, 
+        deleted, created_at, updated_at
+    </sql>
+
+    <!-- 分页查询用户订单 -->
+    <select id="selectUserOrderPage" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM orders 
+        WHERE deleted = 0 
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据订单编号查询订单 -->
+    <select id="selectByOrderNo" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM orders 
+        WHERE order_no = #{orderNo} AND deleted = 0
+    </select>
+
+    <!-- 统计用户订单数量 -->
+    <select id="countUserOrders" resultType="int">
+        SELECT COUNT(*) 
+        FROM orders 
+        WHERE deleted = 0 
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="status != null and status != ''">
+            AND status = #{status}
+        </if>
+    </select>
+
+    <!-- 统计指定时间范围内的销售额 -->
+    <select id="sumSalesAmount" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(total_amount), 0)
+        FROM orders 
+        WHERE deleted = 0 
+        AND status IN ('PAID', 'COMPLETED')
+        <if test="startTime != null">
+            AND created_at >= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND created_at &lt;= #{endTime}
+        </if>
+    </select>
+
+    <!-- 统计每日销售数据 -->
+    <select id="selectDailySalesStats" resultType="java.util.Map">
+        SELECT 
+            DATE(created_at) as date,
+            COUNT(*) as order_count,
+            COALESCE(SUM(total_amount), 0) as total_amount
+        FROM orders 
+        WHERE deleted = 0 
+        AND status IN ('PAID', 'COMPLETED')
+        <if test="startDate != null">
+            AND DATE(created_at) >= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND DATE(created_at) &lt;= #{endDate}
+        </if>
+        GROUP BY DATE(created_at)
+        ORDER BY date DESC
+    </select>
+
+    <!-- 查询超时未支付订单 -->
+    <select id="selectTimeoutOrders" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM orders 
+        WHERE deleted = 0 
+        AND status = 'PENDING_PAYMENT'
+        AND created_at &lt; DATE_SUB(NOW(), INTERVAL #{timeoutMinutes} MINUTE)
+    </select>
+
+</mapper> 

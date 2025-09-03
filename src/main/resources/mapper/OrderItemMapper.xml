@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smartcabinet.mapper.OrderItemMapper">
+
+    <!-- 基础结果映射 -->
+    <resultMap id="BaseResultMap" type="com.smartcabinet.model.entity.OrderItem">
+        <id column="item_id" property="itemId" jdbcType="BIGINT"/>
+        <result column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="product_id" property="productId" jdbcType="BIGINT"/>
+        <result column="product_name" property="productName" jdbcType="VARCHAR"/>
+        <result column="product_price" property="productPrice" jdbcType="DECIMAL"/>
+        <result column="quantity" property="quantity" jdbcType="INTEGER"/>
+        <result column="subtotal" property="subtotal" jdbcType="DECIMAL"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础字段 -->
+    <sql id="Base_Column_List">
+        item_id, order_id, product_id, product_name, product_price, 
+        quantity, subtotal, created_at, updated_at
+    </sql>
+
+    <!-- 根据订单ID查询订单商品 -->
+    <select id="selectByOrderId" resultMap="BaseResultMap">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM order_items 
+        WHERE order_id = #{orderId}
+        ORDER BY item_id ASC
+    </select>
+
+    <!-- 批量插入订单商品 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO order_items (
+            order_id, product_id, product_name, product_price, 
+            quantity, subtotal, created_at, updated_at
+        ) VALUES
+        <foreach collection="items" item="item" separator=",">
+            (
+                #{item.orderId}, #{item.productId}, #{item.productName}, 
+                #{item.productPrice}, #{item.quantity}, #{item.subtotal}, 
+                NOW(), NOW()
+            )
+        </foreach>
+    </insert>
+
+</mapper> 
