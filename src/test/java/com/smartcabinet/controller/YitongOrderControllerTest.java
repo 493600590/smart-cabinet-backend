@@ -3,7 +3,7 @@ package com.smartcabinet.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartcabinet.common.result.Result;
-import com.smartcabinet.entity.YitongOrder;
+import com.smartcabinet.model.entity.YitongOrder;
 import com.smartcabinet.mapper.YitongOrderMapper;
 import com.smartcabinet.mapper.YitongOrderItemMapper;
 import org.junit.jupiter.api.BeforeEach;

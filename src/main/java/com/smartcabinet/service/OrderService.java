@@ -2,7 +2,7 @@ package com.smartcabinet.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.smartcabinet.entity.Order;
+import com.smartcabinet.model.entity.Order;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

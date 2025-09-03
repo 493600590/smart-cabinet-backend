@@ -2,7 +2,7 @@ package com.smartcabinet.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.smartcabinet.entity.Product;
+import com.smartcabinet.model.entity.Product;
 import com.smartcabinet.mapper.ProductMapper;
 import com.smartcabinet.service.ProductService;
 import lombok.RequiredArgsConstructor;

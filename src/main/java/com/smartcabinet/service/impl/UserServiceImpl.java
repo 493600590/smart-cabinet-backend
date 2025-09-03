@@ -1,7 +1,7 @@
 package com.smartcabinet.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.smartcabinet.entity.User;
+import com.smartcabinet.model.entity.User;
 import com.smartcabinet.mapper.UserMapper;
 import com.smartcabinet.service.UserService;
 import com.smartcabinet.utils.JwtUtil;

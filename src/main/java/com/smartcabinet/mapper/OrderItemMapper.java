@@ -1,7 +1,7 @@
 package com.smartcabinet.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.smartcabinet.entity.OrderItem;
+import com.smartcabinet.model.entity.OrderItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

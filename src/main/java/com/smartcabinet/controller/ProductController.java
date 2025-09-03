@@ -2,7 +2,7 @@ package com.smartcabinet.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.smartcabinet.common.result.Result;
-import com.smartcabinet.entity.Product;
+import com.smartcabinet.model.entity.Product;
 import com.smartcabinet.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;

@@ -3,7 +3,7 @@ package com.smartcabinet.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.smartcabinet.entity.YitongOrder;
+import com.smartcabinet.model.entity.YitongOrder;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -24,9 +24,9 @@ public interface YitongOrderMapper extends BaseMapper<YitongOrder> {
     @Select("SELECT o.*, " +
             "d.device_name, d.location, d.address, " +
             "u.nickname, u.avatar_url " +
-            "FROM hibianli_orders o " +
-            "LEFT JOIN hibianli_devices d ON o.device_code = d.device_code " +
-            "LEFT JOIN hibianli_users u ON o.user_id = u.hbl_user_id " +
+            "FROM yt_orders o " +
+            "LEFT JOIN yt_devices d ON o.device_code = d.device_code " +
+            "LEFT JOIN yt_users u ON o.user_id = u.hbl_user_id " +
             "WHERE o.user_id = #{userId} " +
             "AND o.deleted = 0 " +
             "ORDER BY o.created_at DESC")
@@ -38,9 +38,9 @@ public interface YitongOrderMapper extends BaseMapper<YitongOrder> {
     @Select("SELECT o.*, " +
             "d.device_name, d.location, d.address, " +
             "u.nickname, u.avatar_url " +
-            "FROM hibianli_orders o " +
-            "LEFT JOIN hibianli_devices d ON o.device_code = d.device_code " +
-            "LEFT JOIN hibianli_users u ON o.user_id = u.hbl_user_id " +
+            "FROM yt_orders o " +
+            "LEFT JOIN yt_devices d ON o.device_code = d.device_code " +
+            "LEFT JOIN yt_users u ON o.user_id = u.hbl_user_id " +
             "WHERE o.user_id = #{userId} " +
             "AND o.order_status = #{orderStatus} " +
             "AND o.deleted = 0 " +
@@ -55,9 +55,9 @@ public interface YitongOrderMapper extends BaseMapper<YitongOrder> {
     @Select("SELECT o.*, " +
             "d.device_name, d.location, d.address, d.device_model, " +
             "u.nickname, u.avatar_url, u.phone " +
-            "FROM hibianli_orders o " +
-            "LEFT JOIN hibianli_devices d ON o.device_code = d.device_code " +
-            "LEFT JOIN hibianli_users u ON o.user_id = u.hbl_user_id " +
+            "FROM yt_orders o " +
+            "LEFT JOIN yt_devices d ON o.device_code = d.device_code " +
+            "LEFT JOIN yt_users u ON o.user_id = u.hbl_user_id " +
             "WHERE o.order_code = #{orderCode} " +
             "AND o.deleted = 0")
     YitongOrder selectOrderDetailByCode(@Param("orderCode") String orderCode);
@@ -66,7 +66,7 @@ public interface YitongOrderMapper extends BaseMapper<YitongOrder> {
      * 统计用户各状态订单数量
      */
     @Select("SELECT order_status, COUNT(*) as count " +
-            "FROM hibianli_orders " +
+            "FROM yt_orders " +
             "WHERE user_id = #{userId} " +
             "AND deleted = 0 " +
             "GROUP BY order_status")
@@ -75,7 +75,7 @@ public interface YitongOrderMapper extends BaseMapper<YitongOrder> {
     /**
      * 查询用户最近的订单
      */
-    @Select("SELECT * FROM hibianli_orders " +
+    @Select("SELECT * FROM yt_orders " +
             "WHERE user_id = #{userId} " +
             "AND deleted = 0 " +
             "ORDER BY created_at DESC " +

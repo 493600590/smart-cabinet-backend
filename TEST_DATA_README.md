@@ -55,7 +55,7 @@
 mysql -u username -p smart_cabinet
 
 # 执行测试数据脚本
-source src/main/resources/sql/hibianli_test_data.sql;
+source src/main/resources/sql/yt_test_data.sql;
 ```
 
 #### 方法2: 使用执行脚本

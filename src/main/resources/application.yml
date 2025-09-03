@@ -97,6 +97,16 @@ mqtt:
     device-status: device/+/status
     device-sensor: device/+/sensor
 
+# SpringDoc OpenAPI配置
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+
 # 微信小程序配置
 wechat:
   miniprogram:

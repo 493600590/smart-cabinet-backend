@@ -1,4 +1,4 @@
-package com.smartcabinet.entity;
+package com.smartcabinet.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("hibianli_orders")
+@TableName("yt_orders")
 public class YitongOrder {
     
     /**

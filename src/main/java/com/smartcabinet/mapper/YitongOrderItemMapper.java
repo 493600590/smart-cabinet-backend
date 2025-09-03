@@ -1,7 +1,7 @@
 package com.smartcabinet.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.smartcabinet.entity.YitongOrderItem;
+import com.smartcabinet.model.entity.YitongOrderItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -22,8 +22,8 @@ public interface YitongOrderItemMapper extends BaseMapper<YitongOrderItem> {
     @Select("SELECT oi.*, " +
             "g.name as goods_name, g.sku, g.description, g.image_url, " +
             "g.brand_name, g.weight, g.volume " +
-            "FROM hibianli_order_items oi " +
-            "LEFT JOIN hibianli_goods g ON oi.goods_id = g.goods_id " +
+            "FROM yt_order_items oi " +
+            "LEFT JOIN yt_goods g ON oi.goods_id = g.goods_id " +
             "WHERE oi.order_id = #{orderId} " +
             "ORDER BY oi.created_at ASC")
     List<YitongOrderItem> selectOrderItemsWithGoods(@Param("orderId") Long orderId);
@@ -34,8 +34,8 @@ public interface YitongOrderItemMapper extends BaseMapper<YitongOrderItem> {
     @Select("SELECT oi.*, " +
             "g.name as goods_name, g.sku, g.description, g.image_url, " +
             "g.brand_name, g.weight, g.volume " +
-            "FROM hibianli_order_items oi " +
-            "LEFT JOIN hibianli_goods g ON oi.goods_id = g.goods_id " +
+            "FROM yt_order_items oi " +
+            "LEFT JOIN yt_goods g ON oi.goods_id = g.goods_id " +
             "WHERE oi.order_code = #{orderCode} " +
             "ORDER BY oi.created_at ASC")
     List<YitongOrderItem> selectOrderItemsByCode(@Param("orderCode") String orderCode);
@@ -47,9 +47,9 @@ public interface YitongOrderItemMapper extends BaseMapper<YitongOrderItem> {
             "SUM(oi.quantity) as total_quantity, " +
             "COUNT(DISTINCT oi.order_id) as order_count, " +
             "MAX(oi.created_at) as last_buy_time " +
-            "FROM hibianli_order_items oi " +
-            "LEFT JOIN hibianli_orders o ON oi.order_id = o.order_id " +
-            "LEFT JOIN hibianli_goods g ON oi.goods_id = g.goods_id " +
+            "FROM yt_order_items oi " +
+            "LEFT JOIN yt_orders o ON oi.order_id = o.order_id " +
+            "LEFT JOIN yt_goods g ON oi.goods_id = g.goods_id " +
             "WHERE o.user_id = #{userId} " +
             "AND o.order_status = 'COMPLETED' " +
             "AND o.deleted = 0 " +

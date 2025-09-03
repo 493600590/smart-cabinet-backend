@@ -10,7 +10,7 @@ USE smart_cabinet;
 -- DELETE FROM hibianli_users WHERE hbl_user_id IN ('YT_USER_004', 'YT_USER_005');
 
 -- 执行测试数据插入
-SOURCE src/main/resources/sql/hibianli_test_data.sql;
+SOURCE src/main/resources/sql/yt_test_data.sql;
 
 -- 验证数据插入结果
 SELECT 

@@ -1,4 +1,4 @@
-package com.smartcabinet.entity;
+package com.smartcabinet.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("hibianli_users")
+@TableName("yt_users")
 public class YitongUser {
     
     /**

@@ -1,7 +1,7 @@
 package com.smartcabinet.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.smartcabinet.entity.OrderItem;
+import com.smartcabinet.model.entity.OrderItem;
 
 import java.util.List;
 

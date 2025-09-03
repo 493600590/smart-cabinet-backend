@@ -1,7 +1,7 @@
 package com.smartcabinet.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.smartcabinet.entity.DeviceStatus;
+import com.smartcabinet.model.entity.DeviceStatus;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

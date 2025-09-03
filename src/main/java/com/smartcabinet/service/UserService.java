@@ -1,7 +1,7 @@
 package com.smartcabinet.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.smartcabinet.entity.User;
+import com.smartcabinet.model.entity.User;
 
 /**
  * 用户服务接口

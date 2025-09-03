@@ -2,7 +2,7 @@ package com.smartcabinet.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.smartcabinet.entity.Device;
+import com.smartcabinet.model.entity.Device;
 import com.smartcabinet.mapper.DeviceMapper;
 import com.smartcabinet.service.DeviceService;
 import lombok.RequiredArgsConstructor;

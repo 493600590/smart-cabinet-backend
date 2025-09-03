@@ -2,7 +2,7 @@ package com.smartcabinet.controller;
 
 import com.smartcabinet.common.result.Result;
 import com.smartcabinet.common.result.ResultCode;
-import com.smartcabinet.entity.User;
+import com.smartcabinet.model.entity.User;
 import com.smartcabinet.service.UserService;
 import com.smartcabinet.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;

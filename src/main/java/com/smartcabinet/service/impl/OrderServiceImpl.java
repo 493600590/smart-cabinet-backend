@@ -2,8 +2,8 @@ package com.smartcabinet.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.smartcabinet.entity.Order;
-import com.smartcabinet.entity.OrderItem;
+import com.smartcabinet.model.entity.Order;
+import com.smartcabinet.model.entity.OrderItem;
 import com.smartcabinet.mapper.OrderMapper;
 import com.smartcabinet.service.OrderService;
 import com.smartcabinet.service.OrderItemService;

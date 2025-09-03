@@ -4,7 +4,7 @@
 USE smart_cabinet;
 
 -- 1. 易通无人柜事件表 (用于记录开门事件)
-CREATE TABLE hibianli_events (
+CREATE TABLE yt_events (
     event_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '事件ID',
     hbl_event_no VARCHAR(50) UNIQUE COMMENT '易通流水号',
     ext_event_no VARCHAR(100) COMMENT '外部事件编号',
@@ -19,8 +19,7 @@ CREATE TABLE hibianli_events (
     time_stamp VARCHAR(20) COMMENT '时间戳',
     sign VARCHAR(100) COMMENT '签名',
     company_id INT COMMENT '公司ID',
-    reserved_field1 VARCHAR(255) COMMENT '预留字段1',
-    reserved_field2 VARCHAR(255) COMMENT '预留字段2',
+    reserved_field1 VARCHAR(255) COMMENT '预留字段1',    reserved_field2 VARCHAR(255) COMMENT '预留字段2',
     reserved_field3 VARCHAR(255) COMMENT '预留字段3',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -31,7 +30,7 @@ CREATE TABLE hibianli_events (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜事件记录表';
 
 -- 2. 易通无人柜订单表 (扩展原有订单表)
-CREATE TABLE hibianli_orders (
+CREATE TABLE yt_orders (
     order_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '订单ID',
     order_code VARCHAR(50) UNIQUE NOT NULL COMMENT '订单编号',
     hbl_order_no VARCHAR(50) COMMENT '易通订单号',
@@ -72,11 +71,11 @@ CREATE TABLE hibianli_orders (
     INDEX idx_order_status (order_status),
     INDEX idx_pay_status (pay_status),
     INDEX idx_created_at (created_at),
-    FOREIGN KEY (event_id) REFERENCES hibianli_events(event_id) ON DELETE SET NULL
+    FOREIGN KEY (event_id) REFERENCES yt_events(event_id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜订单表';
 
 -- 3. 易通无人柜商品表 (云库商品信息)
-CREATE TABLE hibianli_goods (
+CREATE TABLE yt_goods (
     goods_id BIGINT PRIMARY KEY COMMENT '云库商品ID',
     hbl_sku_id VARCHAR(50) COMMENT '易通SKU ID',
     barcode VARCHAR(50) COMMENT '一维条码',
@@ -115,7 +114,7 @@ CREATE TABLE hibianli_goods (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜商品信息表';
 
 -- 4. 易通无人柜订单商品明细表
-CREATE TABLE hibianli_order_items (
+CREATE TABLE yt_order_items (
     item_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '订单商品ID',
     order_id BIGINT NOT NULL COMMENT '订单ID',
     order_code VARCHAR(50) NOT NULL COMMENT '订单编号',
@@ -137,18 +136,19 @@ CREATE TABLE hibianli_order_items (
     reserved_field1 VARCHAR(255) COMMENT '预留字段1',
     reserved_field2 VARCHAR(255) COMMENT '预留字段2',
     reserved_field3 VARCHAR(255) COMMENT '预留字段3',
+    pay_time TIMESTAMP COMMENT '订单支付时间',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     INDEX idx_order_id (order_id),
     INDEX idx_order_code (order_code),
     INDEX idx_goods_id (goods_id),
     INDEX idx_hbl_sku_id (hbl_sku_id),
     INDEX idx_barcode (barcode),
-    FOREIGN KEY (order_id) REFERENCES hibianli_orders(order_id) ON DELETE CASCADE
+    FOREIGN KEY (order_id) REFERENCES yt_orders(order_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜订单商品明细表';
 
 -- 5. 易通无人柜设备商品关联表
-CREATE TABLE hibianli_device_goods (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
+CREATE TABLE yt_device_goods (
+    device_goods_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT 'ID',
     device_code VARCHAR(50) NOT NULL COMMENT '设备编码',
     goods_id BIGINT NOT NULL COMMENT '商品ID',
     hbl_sku_id VARCHAR(50) COMMENT '易通SKU ID',
@@ -167,11 +167,11 @@ CREATE TABLE hibianli_device_goods (
     INDEX idx_device_code (device_code),
     INDEX idx_goods_id (goods_id),
     INDEX idx_status (status),
-    FOREIGN KEY (goods_id) REFERENCES hibianli_goods(goods_id) ON DELETE CASCADE
+    FOREIGN KEY (goods_id) REFERENCES yt_goods(goods_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜设备商品关联表';
 
 -- 6. 易通无人柜识别结果表
-CREATE TABLE hibianli_recognition_results (
+CREATE TABLE yt_recognition_results (
     result_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '识别结果ID',
     event_id BIGINT NOT NULL COMMENT '事件ID',
     hbl_event_no VARCHAR(50) COMMENT '易通无人柜流水号',
@@ -194,11 +194,11 @@ CREATE TABLE hibianli_recognition_results (
     INDEX idx_device_code (device_code),
     INDEX idx_recog_code (recog_code),
     INDEX idx_created_at (created_at),
-    FOREIGN KEY (event_id) REFERENCES hibianli_events(event_id) ON DELETE CASCADE
+    FOREIGN KEY (event_id) REFERENCES yt_events(event_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜识别结果表';
 
 -- 7. 易通无人柜识别商品明细表
-CREATE TABLE hibianli_recognition_items (
+CREATE TABLE yt_recognition_items (
     item_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '识别商品ID',
     result_id BIGINT NOT NULL COMMENT '识别结果ID',
     event_id BIGINT NOT NULL COMMENT '事件ID',
@@ -216,11 +216,11 @@ CREATE TABLE hibianli_recognition_items (
     INDEX idx_event_id (event_id),
     INDEX idx_sku_id (sku_id),
     INDEX idx_barcode (barcode),
-    FOREIGN KEY (result_id) REFERENCES hibianli_recognition_results(result_id) ON DELETE CASCADE
+    FOREIGN KEY (result_id) REFERENCES yt_recognition_results(result_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜识别商品明细表';
 
 -- 8. 易通无人柜分账记录表
-CREATE TABLE hibianli_share_records (
+CREATE TABLE yt_share_records (
     share_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '分账ID',
     event_id BIGINT COMMENT '事件ID',
     order_id BIGINT COMMENT '订单ID',
@@ -246,12 +246,12 @@ CREATE TABLE hibianli_share_records (
     INDEX idx_third_pay_order_id (third_pay_order_id),
     INDEX idx_share_status (share_status),
     INDEX idx_trade_time (trade_time),
-    FOREIGN KEY (event_id) REFERENCES hibianli_events(event_id) ON DELETE SET NULL,
-    FOREIGN KEY (order_id) REFERENCES hibianli_orders(order_id) ON DELETE SET NULL
+    FOREIGN KEY (event_id) REFERENCES yt_events(event_id) ON DELETE SET NULL,
+    FOREIGN KEY (order_id) REFERENCES yt_orders(order_id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜分账记录表';
 
 -- 9. 易通无人柜用户扩展表 (扩展原有用户信息)
-CREATE TABLE hibianli_users (
+CREATE TABLE yt_users (
     user_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '用户ID',
     original_user_id BIGINT COMMENT '关联原用户表ID',
     hbl_user_id VARCHAR(100) UNIQUE COMMENT '易通无人柜用户ID',
@@ -290,7 +290,7 @@ CREATE TABLE hibianli_users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='易通无人柜用户扩展表';
 
 -- 10. 易通无人柜设备扩展表
-CREATE TABLE hibianli_devices (
+CREATE TABLE yt_devices (
     device_id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '设备ID',
     device_code VARCHAR(50) UNIQUE NOT NULL COMMENT '设备编码',
     ext_code VARCHAR(100) COMMENT '外部编码',

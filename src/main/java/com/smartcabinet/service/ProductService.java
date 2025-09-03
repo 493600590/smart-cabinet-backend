@@ -2,7 +2,7 @@ package com.smartcabinet.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.smartcabinet.entity.Product;
+import com.smartcabinet.model.entity.Product;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.smartcabinet.entity;
+package com.smartcabinet.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;

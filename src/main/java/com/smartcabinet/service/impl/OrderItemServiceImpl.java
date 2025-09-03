@@ -1,7 +1,7 @@
 package com.smartcabinet.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.smartcabinet.entity.OrderItem;
+import com.smartcabinet.model.entity.OrderItem;
 import com.smartcabinet.mapper.OrderItemMapper;
 import com.smartcabinet.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
