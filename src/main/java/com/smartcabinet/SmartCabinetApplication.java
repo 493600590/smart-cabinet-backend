@@ -24,7 +24,7 @@ public class SmartCabinetApplication {
         SpringApplication.run(SmartCabinetApplication.class, args);
         System.out.println("====================================");
         System.out.println("无人柜系统后端服务启动成功！");
-        System.out.println("API文档地址: http://localhost:8080/api/swagger-ui/index.html");
+        System.out.println("API文档地址: http://localhost:8000/api/swagger-ui/index.html");
         System.out.println("====================================");
     }
 }
